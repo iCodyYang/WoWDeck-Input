@@ -1,0 +1,14 @@
+import ts from 'typescript';
+import vm from 'node:vm';
+import {readFileSync} from 'node:fs';
+import assert from 'node:assert/strict';
+const writes=[];
+const code=ts.transpileModule(readFileSync(new URL('../src/config.ts',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText;
+const exports={};
+vm.runInNewContext(code,{exports,require(name){if(name==='@decky/api')return {callable:route=>async value=>{if(route==='set_appearance')writes.push(JSON.parse(JSON.stringify(value)));return value;}};return {EvdevToKey:{57:'Space',66:'F8'}};},setTimeout,clearTimeout,console});
+await exports.flushAppearance();assert.equal(writes.length,0,'unloading before first state must not write defaults');
+const actual={...exports.getConfig(),enabled:true,appearance:{x:100,y:200,scale:.8,opacity:.95},appearance_migrated:true};
+exports.putConfig(actual);await exports.flushAppearance();assert.equal(writes.length,0,'unmodified loaded appearance must not be rewritten');
+exports.saveAppearance({x:150,y:250,scale:.75,opacity:.8});await exports.flushAppearance();assert.equal(writes.length,1);assert.equal(writes[0].x,150);
+await exports.flushAppearance();assert.equal(writes.length,1,'already saved appearance must not be flushed again');
+console.log('PASS: hot reload preserves settings before initialization; only actual appearance edits are flushed');

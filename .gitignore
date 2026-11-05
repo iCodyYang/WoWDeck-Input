@@ -1,0 +1,14 @@
+/node_modules
+dist/
+release/
+__pycache__/
+*.py[cod]
+.DS_Store
+.env
+.env.*
+!.env.example
+settings.json
+*.log
+*.bak
+.vscode/
+.idea/
