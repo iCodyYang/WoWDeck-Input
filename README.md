@@ -4,6 +4,8 @@
 
 **在 Steam Deck 上，用外接键盘轻松打中文。**
 
+![WoWDeck Input：Steam Deck 外接键盘中文输入法](docs/images/wowdeck-input-cover.png)
+
 WoWDeck Input 是一款面向 Steam Deck 游戏模式的 [Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader) 插件。它使用 Steam 原生键盘与系统拼音引擎，让外接键盘支持全拼、小鹤双拼和精简候选框。
 
 这个项目从《魔兽世界：无限》的聊天需求出发开发，不需要安装魔兽游戏内插件。当前为 **0.1.3 测试版**。
