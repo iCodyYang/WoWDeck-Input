@@ -7,8 +7,9 @@ def package(path,files):
   for f in sorted(files):z.write(f,Path(folder)/f.relative_to(base))
  assert zipfile.ZipFile(path).testzip() is None
  return hashlib.sha256(path.read_bytes()).hexdigest()
-runtime=[base/n for n in ['main.py','model.py','package.json','plugin.json','LICENSE','NOTICE.md','README.md','INSTALL.md','VALIDATION.md']]
+runtime=[base/n for n in ['main.py','model.py','package.json','plugin.json','LICENSE','NOTICE.md','README.md','README.en.md','INSTALL.md','VALIDATION.md']]
 runtime += [p for d in ['dist','py_modules'] for p in (base/d).rglob('*') if p.is_file() and '__pycache__' not in p.parts and not p.name.endswith('.map')]
+runtime += [p for p in (base/'docs').rglob('*') if p.is_file()]
 source=runtime+[base/n for n in ['.gitignore','build_release.py','build_frontend.mjs','tsconfig.json','rollup.config.js']]+[p for d in ['src','tests'] for p in (base/d).rglob('*') if p.is_file() and '__pycache__' not in p.parts]
 manifest={}
 for suffix,files in [('',runtime),('-source',source)]:
