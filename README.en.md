@@ -2,7 +2,9 @@
 
 [简体中文](README.md) | **English**
 
-**Type Chinese or hold a back button to dictate in Steam Deck Gaming Mode.**
+**Chinese voice input and external keyboard support for World of Warcraft: Forever in Steam Deck Gaming Mode.**
+
+![WoWDeck Input: Chinese voice input and external keyboard support](https://raw.githubusercontent.com/iCodyYang/WoWDeck-Input/main/docs/images/wowdeck-input-2.0-cover.png)
 
 [Download v2.0.0](https://github.com/iCodyYang/WoWDeck-Input/releases/download/v2.0.0/WoWDeck-Input-2.0.0.zip) · [Release files](https://github.com/iCodyYang/WoWDeck-Input/releases/tag/v2.0.0) · [Detailed voice guide (Chinese)](docs/VOICE.md)
 

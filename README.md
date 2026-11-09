@@ -1,8 +1,10 @@
-# WoWDeck Input 2.0｜魔兽掌机输入法
+# 《魔兽世界》：“无限” Steam Deck 中文输入法
 
 **简体中文** | [English](README.en.md)
 
-**在 Steam Deck 游戏模式里打中文，或按住背键说话。**
+**在 Steam Deck 游戏模式下玩《魔兽世界》：“无限”时，支持中文语音输入+外接键盘**
+
+![《魔兽世界》：“无限” Steam Deck 中文输入法：中文语音输入+外接键盘](https://raw.githubusercontent.com/iCodyYang/WoWDeck-Input/main/docs/images/wowdeck-input-2.0-cover.png)
 
 [下载 v2.0.0 安装包](https://github.com/iCodyYang/WoWDeck-Input/releases/download/v2.0.0/WoWDeck-Input-2.0.0.zip) · [全部发行文件](https://github.com/iCodyYang/WoWDeck-Input/releases/tag/v2.0.0) · [语音使用指南](docs/VOICE.md) · [安装说明](INSTALL.md)
 
