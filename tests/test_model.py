@@ -24,6 +24,11 @@ class InputPreferences(unittest.TestCase):
   self.assertEqual(appearance({'opacity':0,'scale':10})['opacity'],.2)
  def test_settings_disable_by_default(self):
   self.assertFalse(validate({})['enabled']);self.assertEqual(validate({})['scheme'],'full')
+ def test_voice_defaults_independent_and_keep_explicit_choices(self):
+  self.assertEqual(validate({})['voiceKey'],'F7')
+  self.assertFalse(validate({'enabled':False})['voiceWanted'])
+  self.assertFalse(validate({'voiceWanted':False})['voiceWanted'])
+  self.assertEqual(validate({'voiceKey':'F11'})['voiceKey'],'F11')
  def test_default_engine_and_existing_xiaohe(self):
   self.assertEqual(effective_scheme({}),'full')
   self.assertEqual(effective_scheme({'DoublePinyin':'true','DoublePinyinSchema':'5'}),'xiaohe')

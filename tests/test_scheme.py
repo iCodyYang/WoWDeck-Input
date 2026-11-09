@@ -10,7 +10,7 @@ from model import DEFAULTS
 class SchemeChanges(unittest.IsolatedAsyncioTestCase):
  async def asyncSetUp(self):
   self.temp=tempfile.TemporaryDirectory();self.plugin=module.Plugin();p=self.plugin
-  p.directory=Path(self.temp.name);p.path=p.directory/'settings.json';p.config=copy.deepcopy(DEFAULTS);p.grabbing=False;p.lock=asyncio.Lock();p.devices={}
+  p.directory=Path(self.temp.name);p.path=p.directory/'settings.json';p.config=copy.deepcopy(DEFAULTS);p.config['pluginEnabled']=True;p.stopping=False;p.grabbing=False;p.grab_timeout=None;p.lock=asyncio.Lock();p.devices={}
   self.values={'DoublePinyin':'true','DoublePinyinSchema':'5'};self.original=self.values.copy();self.fail=False
   async def command(*args):
    action=args[1];key=args[2].split('/')[-1]
@@ -44,3 +44,13 @@ class SchemeChanges(unittest.IsolatedAsyncioTestCase):
   p=self.plugin;await p.set_enabled(True);self.assertEqual(self.values['DoublePinyin'],'false')
   await p.set_enabled(False);await p.set_scheme('xiaohe');await p.set_enabled(True)
   self.assertEqual(self.values,self.original);self.assertEqual(p.config['scheme'],'xiaohe')
+
+ async def test_manual_voice_key_persists_and_rejects_conflict(self):
+  p=self.plugin
+  p.voice=types.SimpleNamespace(call=AsyncMock(),view=lambda key:{'hotkey':key},state={'enabled':False})
+  p.get_voice_state=lambda: asyncio.sleep(0,result=p.voice.view(p.config['voiceKey']))
+  self.assertEqual((await p.set_voice_key('F10'))['hotkey'],'F10')
+  self.assertEqual(json.loads(p.path.read_text())['voiceKey'],'F10')
+  for invalid in ('F8','F13','Escape'):
+   with self.assertRaises(ValueError): await p.set_voice_key(invalid)
+  self.assertEqual(p.config['voiceKey'],'F10')

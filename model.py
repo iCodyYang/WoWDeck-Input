@@ -1,8 +1,11 @@
 """Validated preferences and physical keyboard chord detection; no input text logs."""
 import copy
+from voice.waveform import DEFAULT_BAR, bar_settings
 MODIFIERS={29:'Ctrl',97:'Ctrl',42:'Shift',54:'Shift',56:'Alt',100:'Alt',125:'Super',126:'Super'}
-FKEYS=set(range(59,69))|{87,88}
-DEFAULTS={'version':1,'enabled':False,'scheme':'full','wake':{'key':57,'mods':['Ctrl']},'adjust':{'key':66,'mods':[]},'appearance':{'x':12,'y':80,'scale':.85,'opacity':.95},'appearance_migrated':False}
+FUNCTION_CODES = dict(zip((f'F{i}' for i in range(1, 13)), [*range(59, 69), 87, 88]))
+FKEYS=set(FUNCTION_CODES.values())
+DEFAULTS={'version':4,'pluginEnabled':False,'enabled':False,'scheme':'full','voiceKey':'F7','voiceWanted':False,'wake':{'key':57,'mods':['Ctrl']},'adjust':{'key':66,'mods':[]},'appearance':{'x':12,'y':80,'scale':.85,'opacity':.95},'appearance_migrated':False}
+DEFAULTS['voiceBar'] = DEFAULT_BAR.copy()
 def validate_chord(value):
     if not isinstance(value,dict):raise ValueError('无效快捷键')
     key=value.get('key');mods=value.get('mods')
@@ -24,10 +27,27 @@ def validate(value):
     if not isinstance(value,dict):return c
     c.update({k:v for k,v in value.items() if k in c})
     if type(c['enabled']) is not bool:raise ValueError('启用状态无效')
-    if c['scheme'] not in {'keep','full','xiaohe'}:raise ValueError('输入方案无效')
+    version = value.get('version')
+    has_switches = version in (2, 3, 4)
+    c['pluginEnabled'] = has_switches and value.get('pluginEnabled') is True
+    c['voiceWanted'] = has_switches and value.get('voiceWanted') is True
+    if c['scheme'] not in {'keep','full','xiaohe','wubi86'}:raise ValueError('输入方案无效')
     c['wake']=validate_chord(c['wake']);c['adjust']=validate_chord(c['adjust'])
     if c['wake']==c['adjust']:raise ValueError('唤醒和调整快捷键不能相同')
-    c['appearance']=appearance(c['appearance']);c['version']=1
+    key = c['voiceKey']
+    if not isinstance(key, str) or key not in FUNCTION_CODES:
+        key = DEFAULTS['voiceKey']
+    if version != DEFAULTS['version']:
+        # alpha.11 stored F5 as its default. Migrate only that release's
+        # default; keep other selected keys and existing keyboard shortcuts.
+        preferred = DEFAULTS['voiceKey'] if version == 3 and key == 'F5' else key
+        keyboard_codes = {c['wake']['key'], c['adjust']['key']}
+        key = next(candidate for candidate in (preferred, key, 'F7', *FUNCTION_CODES)
+                   if FUNCTION_CODES[candidate] not in keyboard_codes)
+    c['voiceKey'] = key
+    c['appearance']=appearance(c['appearance']);c['version']=DEFAULTS['version']
+    try: c['voiceBar'] = bar_settings(c['voiceBar'])
+    except ValueError: c['voiceBar'] = DEFAULT_BAR.copy()
     return c
 class Chord:
     def __init__(self):self.down=set();self.pending=False

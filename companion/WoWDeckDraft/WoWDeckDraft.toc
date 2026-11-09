@@ -1,0 +1,10 @@
+## Interface: 16001
+## Title: WoWDeck Draft
+## Title-zhCN: WoWDeck 聊天草稿
+## Notes: Double-tap the dictation key to clear its unsent draft. No on-screen controls.
+## Notes-zhCN: 双击听写键清空刚填入的草稿；不显示额外按钮。
+## Author: Cody
+## Version: 0.2.3
+## Dependencies: Blizzard_ChatFrameBase
+
+WoWDeckDraft.lua

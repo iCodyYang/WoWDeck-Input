@@ -1,1 +1,17 @@
-{"name":"WoWDeck Input","author":"Cody","flags":["root"],"api_version":1,"publish":{"tags":["utility","keyboard","chinese"],"description":"魔兽掌机输入法：外接键盘中文输入、全拼与小鹤双拼、自定义快捷键和精简候选框。"}}
+{
+  "name": "WoWDeck Input",
+  "author": "Cody",
+  "flags": [
+    "root"
+  ],
+  "api_version": 1,
+  "publish": {
+    "tags": [
+      "utility",
+      "keyboard",
+      "chinese",
+      "voice"
+    ],
+    "description": "Steam Deck 游戏模式中文输入与语音听写：个人扫码登录、按住 F7 说话、全拼、小鹤双拼与可选五笔 86。"
+  }
+}

@@ -125,7 +125,7 @@ export const SetCandidateDisplay = (dom, physical, updateWindow = () => {}) => {
             const number = Number(key.getAttribute('data-key').split('_').pop()) + 1;
             if (key.dataset.codyNumber !== String(number)) key.dataset.codyNumber = String(number);
         });
-        const visible = Array.from(candidates).some(key => key.textContent.trim().length > 0);
+        const visible = !!dom.querySelector('.cody-wubi') || Array.from(candidates).some(key => key.textContent.trim().length > 0);
         const value = String(visible);
         if (dom.dataset.codyCandidates !== value) dom.dataset.codyCandidates = value;
         updateControls();

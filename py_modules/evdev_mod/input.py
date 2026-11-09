@@ -120,7 +120,9 @@ def _test_bit(bitmask: bytearray, bit: int):
     return bitmask[bit // 8] & (1 << (bit % 8))
 
 def _clean_str(s: bytes):
-    return s.split(b'\0')[0].decode()
+    # Some keyboard firmware uses a non-UTF8 device label. It is metadata, not
+    # a reason to stop listening to every keyboard connected to the machine.
+    return s.split(b'\0')[0].decode('utf-8', errors='replace')
 
 def ioctl_devinfo(fd: int) -> Tuple[int, int, int, int, str, str, str]:
     iid = bytearray(InputID.size())

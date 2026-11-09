@@ -12,3 +12,14 @@ settings.json
 *.bak
 .vscode/
 .idea/
+
+# Runtime account data is local-only; never add it to source control.
+doubao-browser/
+Cookies
+Cookies-journal
+Local Storage/
+Session Storage/
+command.json
+*.sqlite
+*.sqlite3
+*.db
