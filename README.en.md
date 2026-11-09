@@ -38,11 +38,10 @@ Upgrades retain shortcuts, input schemes, appearance and local login data. After
 
 | Gesture | Action |
 | --- | --- |
-| Hold F7 / mapped back button | Record with a live waveform |
-| Release | Finish recognition and fill the current input; do not submit chat |
+| Hold F7 / mapped back button | Record |
+| Release F7 / mapped back button | Finish recognition and fill the current input; do not submit chat |
 | Press again during transcription | Cancel this transcription and insertion |
-| Double-tap after insertion | Clear the just-inserted WoW draft; requires the optional addon below |
-| Open Steam / Quick Access during recording | Cancel dictation and give priority to system menus |
+| Double-tap after insertion | Clear the text just inserted |
 
 Change **听写快捷键** to another available function key if necessary, then update the Steam Input mapping to match. Use **检测背键映射** to diagnose the actual key. A waveform that flashes once may indicate a one-shot mapping instead of Regular Press.
 
