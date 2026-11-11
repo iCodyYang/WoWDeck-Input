@@ -6,19 +6,19 @@
 
 ![WoWDeck Input: Chinese voice input and external keyboard support](https://raw.githubusercontent.com/iCodyYang/WoWDeck-Input/main/docs/images/wowdeck-input-2.0-cover.png)
 
-[Download v2.0.0](https://github.com/iCodyYang/WoWDeck-Input/releases/download/v2.0.0/WoWDeck-Input-2.0.0.zip) · [Release files](https://github.com/iCodyYang/WoWDeck-Input/releases/tag/v2.0.0) · [Detailed voice guide (Chinese)](docs/VOICE.md)
+[Download v2.0.1](https://github.com/iCodyYang/WoWDeck-Input/releases/download/v2.0.1/WoWDeck-Input-2.0.1.zip) · [Release files](https://github.com/iCodyYang/WoWDeck-Input/releases/tag/v2.0.1) · [Detailed voice guide (Chinese)](docs/VOICE.md)
 
 WoWDeck Input is a [Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader) plugin with two independently controlled features:
 
 - **Physical-keyboard Chinese input:** full Pinyin, Xiaohe double Pinyin, and optional Wubi 86. Supports external keyboards and compatible handheld built-in keyboards.
 - **Voice input:** sign in with your own Doubao account using a QR code, hold F7 or a mapped back button to speak, then release to fill the game's text field.
 
-**2.0.0 is the major release following public v0.1.3.** It contains the same functionality as the delivered alpha.23 build. The release contains no account sessions or personal settings.
+The current version is **2.0.1**. The release contains no account sessions or personal settings.
 
 ## Install or upgrade
 
 1. Install Decky Loader using its [official instructions](https://github.com/SteamDeckHomebrew/decky-loader#installation). Initial Decky setup may require Desktop Mode; skip this if Decky is already installed.
-2. Download **`WoWDeck-Input-2.0.0.zip`**. Do not extract it or choose a `-source` / automatically generated GitHub “Source code” archive.
+2. Download **`WoWDeck-Input-2.0.1.zip`**. Do not extract it or choose a `-source` / automatically generated GitHub “Source code” archive.
 3. In Gaming Mode, open **… → Decky plug icon → settings cog**. Enable **Developer Mode** under **General**.
 4. Open **Developer → Third-party plugins → Install Plugin from ZIP → Browse**, select the ZIP, and confirm. The download link above can also be used for URL installation.
 5. Open **WoWDeck Input**, enable **总开关** (master switch), and enable keyboard or voice input as needed.
@@ -33,7 +33,7 @@ Upgrades retain shortcuts, input schemes, appearance and local login data. After
 
 1. Enable **总开关 → 语音输入 → 启用语音输入** and open **语音设置** (voice settings).
 2. Scan the displayed QR using your phone as directed by the login page. Wait for **账号已登录** (signed in) and **就绪** (ready).
-3. In the game's Steam Input layout, map a back button such as R5 to keyboard **F7**, using **Regular Press**. Do not configure a long-press trigger, toggle or turbo; the plugin interprets the gestures itself. An external keyboard can send F7 directly.
+3. In the game's Steam Input layout, map any one of L4, L5, R4 or R5 to keyboard **F7**, using **Regular Press**. Do not configure a long-press trigger, toggle or turbo; the plugin interprets the gestures itself. An external keyboard can send F7 directly.
 4. Focus the game's chat input. Hold the button, speak while the waveform is visible, and release. **正在转写** means transcription is finishing; the result is then inserted as an unsent draft.
 
 | Gesture | Action |
@@ -58,7 +58,7 @@ Basic dictation does not need an in-game addon. Double-tap clearing currently su
 3. Fully restart the game to load the addon.
 4. After voice text is inserted, double-tap the same dictation key to clear that current unsent draft, then hold to dictate again.
 
-Alternatively, extract `WoWDeckDraft-2.0.0.zip` into the correct game's `Interface/AddOns/` directory. The ZIP follows the main release number; the addon internally remains 0.2.3. Existing 0.2.3 installations need no update.
+Alternatively, extract `WoWDeckDraft-2.0.1.zip` into the correct game's `Interface/AddOns/` directory. The ZIP follows the main release number; the addon internally remains 0.2.3. Existing 0.2.3 installations need no update.
 
 This is not universal undo or select-all deletion. Sending the message, switching chat fields or changing the draft invalidates the previous draft's clearing eligibility. No persistent Clear or Move buttons appear in the game.
 

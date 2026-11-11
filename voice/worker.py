@@ -21,8 +21,8 @@ MAX_SECONDS = 20
 UI_HEARTBEAT_TTL = 2  # Allow Steam's background UI timer to tick at 1 Hz.
 HOLD_SECONDS = .28
 DOUBLE_TAP_GAP = .36
-R5_DISCOVERY = .40  # A mapped key-up can precede the physical hold report.
-R5_HEARTBEAT = .40
+BACK_HOLD_DISCOVERY = .40  # A mapped key-up can precede the physical hold report.
+BACK_HOLD_HEARTBEAT = .40
 
 
 def paste_error(reply):
@@ -92,8 +92,8 @@ class Session:
         self.clipboard = None
         self.wave_window = None
         self.press_number = self.hold_token = 0
-        self.r5_until = 0
-        self.r5_confirmed = False
+        self.back_hold_until = 0
+        self.back_hold_confirmed = False
         self.bar = DEFAULT_BAR.copy()
         self.press_time = 0
         self.audio_bytes = 0
@@ -357,9 +357,12 @@ class Session:
                         self.status(f'已就绪。按住 {key} 说话，松开转写。')
                 elif action in ('physical 1', 'physical 0'):
                     self.physical_event(action.endswith('1'), time.monotonic())
-                elif action.startswith('r5 '):
+                elif action.startswith('hold '):
                     _, token, value = action.split()
-                    self.r5_event(int(token), value == '1', time.monotonic())
+                    if value == 'lost':
+                        self.back_hold_lost(int(token))
+                    elif value in ('0', '1'):
+                        self.back_hold_event(int(token), value == '1', time.monotonic())
                 elif action.startswith('bar '):
                     self.bar = bar_settings(json.loads(action[4:]))
                 elif action in ('ui blocked','ui keyboard','ui game','ui unknown'):
@@ -435,8 +438,8 @@ class Session:
         self.end_observation()
 
     def end_observation(self):
-        self.r5_confirmed = False
-        self.r5_until = 0
+        self.back_hold_confirmed = False
+        self.back_hold_until = 0
         if self.hold_token:
             self.hold_token = 0
             self.status()
@@ -448,13 +451,25 @@ class Session:
         self.external_until = now + .10
         self.key_edge(down, now, mapped=False)
 
-    def r5_event(self, token, down, now):
+    def back_hold_event(self, token, down, now):
         if not self.press or not self.hold_token or token != self.hold_token:
             return
-        self.r5_confirmed = True
-        self.r5_until = now + R5_HEARTBEAT if down else 0
+        if not down and not self.back_hold_confirmed:
+            return
+        self.back_hold_confirmed = True
+        self.back_hold_until = now + BACK_HOLD_HEARTBEAT if down else 0
         if not down:
             self.release_press(now)
+
+    def back_hold_lost(self, token):
+        if not self.press or not self.hold_token or token != self.hold_token or not self.back_hold_confirmed:
+            return
+        # Missing controller reports are not a physical release. Never submit
+        # an incomplete utterance just because the observer stopped responding.
+        self.reset_press()
+        self.first_tap = None
+        self.request_cancel()
+        self.status('背键状态中断，本次听写已取消，请重新按住说话。', 'error')
 
     def key_edge(self, down, now, mapped):
         if down == self.key_level:
@@ -470,7 +485,11 @@ class Session:
             return
         if self.press is not None:
             # Repeated Steam Input pulses must not interrupt a confirmed hold.
-            if self.press.up is None or (self.r5_confirmed and self.r5_until > now):
+            if self.back_hold_confirmed:
+                if self.back_hold_until <= now:
+                    self.back_hold_lost(self.hold_token)
+                return
+            if self.press.up is None:
                 return
             self.release_press(self.press.up)
         if self.cancel_on_repress and self.accept_cancel:
@@ -509,15 +528,15 @@ class Session:
         press = self.press
         if not press:
             return
-        if self.r5_confirmed:
-            if self.r5_until <= now:
-                self.release_press(now)
+        if self.back_hold_confirmed:
+            if self.back_hold_until <= now:
+                self.back_hold_lost(self.hold_token)
                 return
         elif press.up is not None:
-            # On the Deck a mapped F-key may pulse while R5 stays held. Keep
+            # On the Deck a mapped F-key may pulse while a back button stays held. Keep
             # watching its token before deciding; an actual second edge resolves
             # the first tap immediately without waiting out this grace period.
-            if now >= press.start + R5_DISCOVERY:
+            if now >= press.start + BACK_HOLD_DISCOVERY:
                 self.release_press(press.up)
             return
         if not press.long and now - press.start >= HOLD_SECONDS:

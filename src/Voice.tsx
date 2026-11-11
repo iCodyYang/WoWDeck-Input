@@ -87,7 +87,7 @@ export function Voice({master,wanted}:{master:boolean;wanted:boolean}){
    {row(<ButtonItem layout="below" disabled={busy} onClick={()=>void installDraft()}>安装或更新魔兽双击清空组件</ButtonItem>)}
    {row(<div style={{fontSize:12}}>{draftMessage || '双击清空需要此组件。进入《魔兽世界：无限》后点这里安装，再重新打开游戏。'}</div>)}
    {row(<div style={{fontSize:12}}>游戏画面不再显示清空或拖动按钮。保留双击听写键清空刚填入草稿的功能。</div>)}
-   {row(<div style={{fontSize:12}}>在游戏的 Steam Input 布局中把背键映射为 {key}。选中聊天输入框，按住背键说话，松开后文字填入草稿。录音中打开 Steam 或“…”菜单会取消这次听写。</div>)}
+   {row(<div style={{fontSize:12}}>在游戏的 Steam Input 布局中把 L4、L5、R4、R5 中任意一颗背键映射为 {key}（普通按压）。选中聊天输入框，按住背键说话，松开后文字填入草稿。录音中打开 Steam 或“…”菜单会取消这次听写。</div>)}
 
   </>}
  </PanelSection>;

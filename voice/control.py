@@ -32,7 +32,7 @@ class VoiceControl:
         self.detected_key = ''
         self.hold_token = 0
         self.hold_task = None
-        self.r5_available = report_stream() is not None
+        self.back_hold_available = report_stream() is not None
 
     async def observe_hold(self, token):
         if token == self.hold_token: return
@@ -55,7 +55,8 @@ class VoiceControl:
 
     def view(self, key):
         profile = Path(self.user.pw_dir) / '.local/share/wowdeck-input/doubao-browser/data'
-        return dict(self.state, retryBlocked=self.retry_blocked, hasProfile=profile.is_dir(), hotkey=key, r5HoldAvailable=self.r5_available,
+        return dict(self.state, retryBlocked=self.retry_blocked, hasProfile=profile.is_dir(), hotkey=key, backHoldAvailable=self.back_hold_available,
+                    r5HoldAvailable=self.back_hold_available,  # Retain the previous read-only API field.
                     testing=self.detector is not None and not self.detector.done(),
                     testMessage=self.test_message, detectedKey=self.detected_key)
 

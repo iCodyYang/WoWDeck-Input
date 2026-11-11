@@ -68,16 +68,16 @@ class VoiceCancel(unittest.IsolatedAsyncioTestCase):
         await s.update_ui('ui game'); self.tap(2.2)
         self.assertIsNone(s.clear_due)
 
-    def test_mapped_pulse_plus_r5_hold_uses_physical_release(self):
+    def test_mapped_pulse_plus_back_hold_uses_physical_release(self):
         s=self.s
         s.key_edge(True,1,mapped=True)
         token=s.hold_token
         s.key_edge(False,1.02,mapped=True)
-        s.r5_event(token,True,1.1)
+        s.back_hold_event(token,True,1.1)
         s.advance_press(1.3)
         self.assertTrue(s.start_due)
         s.recorder=Mock()
-        s.r5_event(token,False,1.45)
+        s.back_hold_event(token,False,1.45)
         self.assertTrue(s.finish_due)
 
     def test_two_short_steam_pulses_between_polls_still_count_twice(self):
@@ -89,6 +89,92 @@ class VoiceCancel(unittest.IsolatedAsyncioTestCase):
         for now in (1.015,1.2,1.61):s.read_key(now)
         self.assertIs(s.clear_due,s.delivery)
         self.assertFalse(s.start_due)
+
+    def test_lost_back_hold_cancels_instead_of_transcribing(self):
+        s = self.s
+        s.key_edge(True, 1, mapped=True)
+        token = s.hold_token
+        s.back_hold_event(token, True, 1.1)
+        s.advance_press(1.3)
+        s.recorder = Mock(returncode=None)
+        s.pending_id = 7
+        s.advance_press(1.51)
+        self.assertFalse(s.finish_due or s.start_due)
+        self.assertTrue(s.discard_requested)
+        self.assertIsNone(s.pending_id)
+        self.assertEqual(s.hold_token, 0)
+        self.assertIn('背键状态中断', s.credit)
+        self.assertIsNone(s.first_tap)
+
+    async def test_stale_back_reports_cannot_resume_after_menu_or_new_press(self):
+        s = self.s
+        s.key_edge(True, 1, mapped=True)
+        old = s.hold_token
+        s.back_hold_event(old, True, 1.1)
+        await s.update_ui('ui blocked')
+        s.back_hold_event(old, True, 1.2)
+        self.assertIsNone(s.press)
+        await s.update_ui('ui game')
+        s.key_edge(False, 2, mapped=True)
+        s.key_edge(True, 3, mapped=True)
+        current = s.hold_token
+        s.back_hold_event(old, False, 3.1)
+        s.back_hold_lost(old)
+        self.assertEqual(s.hold_token, current)
+        self.assertFalse(s.finish_due or s.back_hold_confirmed)
+
+    def test_pulse_arriving_after_report_loss_cannot_submit_partial_audio(self):
+        s = self.s
+        s.key_edge(True, 1, mapped=True)
+        s.back_hold_event(s.hold_token, True, 1.1)
+        s.advance_press(1.3)
+        s.recorder = Mock(returncode=None)
+        s.key_edge(False, 1.4, mapped=True)
+        s.key_edge(True, 1.51, mapped=True)
+        self.assertFalse(s.finish_due)
+        self.assertTrue(s.discard_requested)
+        self.assertEqual(s.hold_token, 0)
+
+    def test_external_keyboard_does_not_take_back_button_reports(self):
+        s = self.s
+        s.physical_event(True, 1)
+        s.back_hold_event(99, True, 1.1)
+        s.back_hold_lost(99)
+        s.advance_press(1.3)
+        s.recorder = Mock()
+        self.assertTrue(s.start_due)
+        self.assertEqual(s.hold_token, 0)
+        s.physical_event(False, 1.5)
+        self.assertTrue(s.finish_due)
+
+    def test_normal_mapped_hold_still_works_without_deck_reports(self):
+        s = self.s
+        s.key_edge(True, 1, mapped=True)
+        s.advance_press(1.3)
+        self.assertTrue(s.start_due)
+        s.recorder = Mock()
+        s.key_edge(False, 1.5, mapped=True)
+        s.advance_press(1.51)
+        self.assertTrue(s.finish_due)
+        self.assertFalse(s.discard_requested)
+
+    def test_back_button_double_tap_and_transcription_cancel_are_preserved(self):
+        s = self.s
+        s.delivery = (s.target, 0)
+        for start in (1, 1.2):
+            s.key_edge(True, start, mapped=True)
+            token = s.hold_token
+            s.key_edge(False, start + .01, mapped=True)
+            s.back_hold_event(token, True, start + .02)
+            s.back_hold_event(token, False, start + .07)
+        self.assertIs(s.clear_due, s.delivery)
+        self.assertFalse(s.start_due)
+        s.cancel_on_repress = True
+        s.pending_id = 7
+        s.key_edge(True, 2, mapped=True)
+        self.assertTrue(s.discard_requested)
+        self.assertIsNone(s.pending_id)
+        self.assertEqual(s.hold_token, 0)
 
     async def test_repress_invalidates_late_result_but_next_result_is_delivered(self):
         s = self.s

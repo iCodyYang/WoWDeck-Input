@@ -1,6 +1,6 @@
 {
   "name": "wowdeck-input",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "type": "module",
   "description": "Chinese keyboard and push-to-talk voice input with personal QR sign-in for Steam Deck",
   "author": "Cody",

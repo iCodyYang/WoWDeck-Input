@@ -6,19 +6,19 @@
 
 ![《魔兽世界》：“无限” Steam Deck 中文输入法：中文语音输入+外接键盘](https://raw.githubusercontent.com/iCodyYang/WoWDeck-Input/main/docs/images/wowdeck-input-2.0-cover.png)
 
-[下载 v2.0.0 安装包](https://github.com/iCodyYang/WoWDeck-Input/releases/download/v2.0.0/WoWDeck-Input-2.0.0.zip) · [全部发行文件](https://github.com/iCodyYang/WoWDeck-Input/releases/tag/v2.0.0) · [语音使用指南](docs/VOICE.md) · [安装说明](INSTALL.md)
+[下载 v2.0.1 安装包](https://github.com/iCodyYang/WoWDeck-Input/releases/download/v2.0.1/WoWDeck-Input-2.0.1.zip) · [全部发行文件](https://github.com/iCodyYang/WoWDeck-Input/releases/tag/v2.0.1) · [语音使用指南](docs/VOICE.md) · [安装说明](INSTALL.md)
 
 WoWDeck Input 是面向 Steam Deck 游戏模式的 [Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader) 插件，提供两项可以独立开关的功能：
 
 - **实体键盘中文输入**：支持外接键盘和兼容掌机的机身键盘，全拼、小鹤双拼与可选的五笔 86。
 - **语音输入**：使用自己的豆包账号扫码登录，按住 F7 或映射为 F7 的背键说话，松开后将文字填入游戏输入框。
 
-**2.0.0 是继公开版 v0.1.3 后的大版本更新。** 它包含已交付 alpha.23 的功能，正式编号不增加新的功能改动。安装包不带任何人的登录态；每位使用者登录自己的账号。
+当前版本为 **2.0.1**。安装包不带任何人的登录态；每位使用者登录自己的账号。
 
 ## 安装与升级
 
 1. 先安装 Decky Loader；已有 Decky 可跳过。首次安装 Decky 请按[官方中文说明](https://github.com/SteamDeckHomebrew/decky-loader/blob/main/README_zh-Hans.md)操作，可能需要进入桌面模式。
-2. 下载 **`WoWDeck-Input-2.0.0.zip`**，不要解压，也不要选择 `-source` 包或 GitHub 自动生成的 “Source code”。
+2. 下载 **`WoWDeck-Input-2.0.1.zip`**，不要解压，也不要选择 `-source` 包或 GitHub 自动生成的 “Source code”。
 3. 在游戏模式打开 **… → Decky 插头图标 → 齿轮设置**，在 **常规** 中开启 **开发者模式**。
 4. 进入 **开发者 → 第三方插件 → 从 ZIP 压缩文件安装插件 → 浏览文件**，选择安装包并确认。也可以在“从 URL 安装”中粘贴上面的安装包直链。
 5. 回到插件列表，打开 **WoWDeck Input**，开启 **总开关**，按需要分别开启键盘或语音。
@@ -33,7 +33,7 @@ WoWDeck Input 是面向 Steam Deck 游戏模式的 [Decky Loader](https://github
 
 1. 开启 **总开关 → 语音输入 → 启用语音输入**，打开 **语音设置**。
 2. 等待二维码出现，用手机按页面提示扫码确认，看到 **账号已登录** 和 **就绪**。
-3. 在对应游戏的 Steam Input 布局中，把一颗背键（例如 R5）设置为键盘 **F7 → 普通按压**。不要设成长按触发、切换保持或连发。外接键盘可直接按 F7。
+3. 在对应游戏的 Steam Input 布局中，把一颗背键（L4、L5、R4、R5 均可）设置为键盘 **F7 → 普通按压**。不要设成长按触发、切换保持或连发。外接键盘可直接按 F7。
 4. 选中游戏聊天输入框，**按住背键说话，松开结束**。录音时显示声音波形，随后显示“正在转写”，完成后自动填入草稿。
 
 | 操作 | 功能 |
@@ -59,7 +59,7 @@ WoWDeck Input 是面向 Steam Deck 游戏模式的 [Decky Loader](https://github
 2. 完整退出并重新进入魔兽，让组件生效。
 3. 语音填入后快速点两下同一听写键，即可清空刚填入、尚未发送的当前草稿，再按住重说。
 
-也可从 Release 下载 `WoWDeckDraft-2.0.0.zip` 手动安装到对应游戏的 `Interface/AddOns/`。压缩包随主版本编号，组件内部版本仍为 0.2.3，已安装该组件的测试版用户无需重复更新。
+也可从 Release 下载 `WoWDeckDraft-2.0.1.zip` 手动安装到对应游戏的 `Interface/AddOns/`。压缩包随主版本编号，组件内部版本仍为 0.2.3，已安装该组件的测试版用户无需重复更新。
 
 这不是任意输入框的通用撤销。发送消息、切换聊天框或改变草稿后，旧草稿的清空资格会失效。游戏内没有常驻“清空”或“拖动”按钮。
 
@@ -114,7 +114,7 @@ WoWDeck Input 是面向 Steam Deck 游戏模式的 [Decky Loader](https://github
 
 **升级会不会改变现在的用法？**
 
-2.0.0 沿用 alpha.23 的输入逻辑，保留已有快捷键、输入方案、外观和独立开关；新增五笔为可选功能。发布前做旧配置、菜单优先、键盘与 F7 回归检查，但自动检查不等于所有设备和游戏均已验收。
+升级保留已有快捷键、输入方案、外观和独立开关；五笔为可选功能。发布前做旧配置、菜单优先、键盘与 F7 回归检查，但自动检查不等于所有设备和游戏均已验收。
 
 ## 隐私与账号
 

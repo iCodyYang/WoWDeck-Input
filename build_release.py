@@ -26,7 +26,7 @@ SOURCE = ('src/utility/wubi.ts', 'tests/wubi.mjs', 'tests/wubi-context.mjs', 'te
           'tests/preferences.mjs', 'tests/test_clipboard_delivery.py',
           'tests/test_control_safety.py', 'tests/test_draft_install.py',
           'tests/test_model.py', 'tests/test_scheme.py', 'tests/test_voice.py',
-          'tests/test_voice_cancel.py', 'tests/test_voice_stream.py',
+          'tests/test_voice_cancel.py', 'tests/test_voice_stream.py', 'tests/test_deck_hold.py',
           'tests/test_waveform.py', 'tests/voice-site.mjs', 'tests/voice_smoke.py',
           'tests/wave-editor.mjs', 'tests/test_release_privacy.py', 'tests/test_compatibility.py',
           'tests/test_startup_recovery.py', 'tests/login-page.mjs')
